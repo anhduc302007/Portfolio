@@ -1,0 +1,508 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 2: Tìm kiếm và đánh giá thông tin học thuật - Doãn Anh Đức</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ===== Background ===== */
+.stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:float linear infinite;
+}
+
+@keyframes float{
+    from{ transform:translateY(100vh); opacity:0; }
+    20%{ opacity:1; }
+    to{ transform:translateY(-100px); opacity:0; }
+}
+
+/* ===== Menu (Cố định dạng thu gọn Scrolled chuyên nghiệp cho trang con) ===== */
+.top-menu{
+    position:fixed;
+    top:15px;
+    right: 20px;
+    height: 60px;
+    background:rgba(0,0,0,.8);
+    border:2px solid rgba(255,255,255,.1);
+    border-radius: 30px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap: 15px;
+    padding: 0 20px;
+    z-index:9999;
+    backdrop-filter:blur(12px);
+}
+
+.menu-btn{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border:2px solid rgba(255,255,255,.3);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.menu-btn i {
+    font-size: 1.2rem;
+}
+
+.menu-btn:hover{
+    background:#8a2be2;
+    transform:translateY(-3px);
+}
+
+/* ===== Hero Task header ===== */
+#task-hero {
+    min-height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 100px;
+    position: relative;
+}
+
+.hero-box {
+    width: 95%;
+    max-width: 1500px;
+    padding: 40px;
+    border-radius: 40px;
+    border: 2px solid rgba(159,92,255,.4);
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    position: relative;
+}
+
+.hero-box h1 {
+    font-size: 2.6rem;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow: 0 0 10px #6a00ff, 0 0 30px #6a00ff;
+    margin-bottom: 15px;
+}
+
+.hero-box p {
+    font-size: 1.2rem;
+    color: #00bfff;
+    font-weight: 500;
+}
+
+/* ===== Content Area ===== */
+.content{
+    position:relative;
+    z-index:20;
+    background:#050505;
+    border-radius:60px 60px 0 0;
+    padding: 60px 10%;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(159,92,255,.3);
+    border-radius:20px;
+    padding:40px;
+    line-height:1.8;
+}
+
+.card h2 {
+    color: #9f5cff;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(159,92,255,.2);
+    padding-bottom: 10px;
+}
+
+.card h2 i {
+    color: #00ffff;
+}
+
+/* ===== Sub-lists and Topics ===== */
+.topic-box {
+    background: rgba(0, 191, 255, 0.05);
+    border-left: 4px solid #00bfff;
+    padding: 15px 20px;
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 25px;
+}
+
+.doc-group {
+    margin-bottom: 25px;
+}
+
+.doc-group h3 {
+    color: #00bfff;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.doc-list {
+    list-style: none;
+    padding-left: 5px;
+}
+
+.doc-item {
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: 0.2s;
+}
+
+.doc-item:hover {
+    background: rgba(159, 92, 255, 0.05);
+    border-color: rgba(159, 92, 255, 0.3);
+}
+
+.doc-item strong {
+    color: #fff;
+}
+
+.doc-item span {
+    color: #a0a0a0;
+    font-style: italic;
+}
+
+/* ===== Styled Table ===== */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 12px;
+    border: 1px solid rgba(159, 92, 255, 0.3);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+    background: rgba(5, 5, 5, 0.6);
+}
+
+th, td {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+th {
+    background: rgba(159, 92, 255, 0.15);
+    color: #9f5cff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.badge-rating {
+    background: rgba(0, 255, 255, 0.1);
+    color: #00ffff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+/* ===== Methods Badge ===== */
+.method-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.method-tag {
+    display: inline-block;
+    font-size: 0.85rem;
+    color: #d0d0d0;
+}
+
+.method-tag i {
+    color: #00bfff;
+    margin-right: 8px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    background: rgba(159, 92, 255, 0.2);
+    border: 1px solid #9f5cff;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.back-btn:hover {
+    background: #9f5cff;
+    box-shadow: 0 0 15px #9f5cff;
+    transform: translateY(-2px);
+}
+
+@media(max-width: 1000px){
+    .hero-box h1 { font-size: 1.8rem; }
+    .content { padding: 40px 5%; }
+    .card { padding: 25px; }
+    th, td { padding: 12px 15px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav class="top-menu" id="topMenu">
+    <a class="menu-btn" href="index.html#hero" title="Trang chủ">
+        <i class="fa-solid fa-house"></i>
+    </a>
+    <a class="menu-btn" href="index.html#about" title="Thông tin">
+        <i class="fa-solid fa-user"></i>
+    </a>
+    <a class="menu-btn" href="index.html#projects" title="Dự án">
+        <i class="fa-solid fa-briefcase"></i>
+    </a>
+    <a class="menu-btn" href="index.html#contact" title="Liên hệ">
+        <i class="fa-solid fa-envelope"></i>
+    </a>
+</nav>
+
+<section id="task-hero">
+    <div class="hero-box">
+        <h1>TASK 2: TÌM KIẾM VÀ ĐÁNH GIÁ THÔNG TIN HỌC THUẬT</h1>
+        <p>Học phần: Nhập môn công nghệ số và ứng dụng trí tuệ nhân tạo</p>
+    </div>
+</section>
+
+<div class="content">
+    <div class="grid-layout">
+        
+        <div class="card">
+            <h2><i class="fa-solid fa-compass"></i> Định hướng nghiên cứu học thuật</h2>
+            <div class="topic-box">
+                <strong>Chủ đề nghiên cứu:</strong><br>
+                <span style="font-size: 1.15rem; color: #fff;">"Tác động của Trí tuệ nhân tạo (AI) đối với hành vi người tiêu dùng trong kỷ nguyên Thương mại điện tử 4.0."</span> 
+            </div>
+            
+            <p style="margin-bottom: 10px;"><strong>Mục tiêu nghiên cứu cốt lõi:</strong></p>
+            <ul style="padding-left: 20px; color: #d0d0d0;">
+                <li>Xác định và phân loại cụ thể các hình thức AI đang trực tiếp định hình trải nghiệm mua sắm trực tuyến toàn cầu (bao gồm Hệ thống Chatbot thông minh, Thuật toán gợi ý cá nhân hóa sản phẩm, Tìm kiếm bằng thị giác máy tính/hình ảnh)[cite: 44].</li>
+                <li>Đánh giá, đo lường và xếp hạng một cách nghiêm ngặt mức độ tin cậy khoa học của toàn bộ các nguồn tài liệu hiện hành liên quan đến chủ đề[cite: 45].</li>
+                <li>Xây dựng và hoàn thiện khung nền tảng lý thuyết vững chắc có nguồn gốc từ giới hàn lâm quốc tế, thiết lập cơ sở dữ liệu nền cho bài luận chuyên ngành[cite: 46].</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-list-ol"></i> Danh mục 10 tài liệu tham khảo thu thập được</h2>
+            <p style="color: #a0a0a0; margin-bottom: 20px;">Hệ thống dữ liệu đã trải qua quy trình sàng lọc phân tầng kỹ lưỡng, bao gồm các bài báo khoa học chuẩn ISI/Scopus, sách chuyên khảo lý thuyết và báo cáo thống kê ngành[cite: 48].</p>
+            
+            <div class="doc-group">
+                <h3><i class="fa-solid fa-graduation-cap"></i> Nhóm 1: Bài báo khoa học (Nguồn: Google Scholar / ScienceDirect)</h3> [cite: 49]
+                <ul class="doc-list">
+                    <li class="doc-item"><strong>Tài liệu 1:</strong> "Artificial Intelligence in Business: From Research to Practice" — <span>Tạp chí Journal of Business Research.</span> [cite: 50]</li>
+                    <li class="doc-item"><strong>Tài liệu 2:</strong> "The impact of AI-driven personalization on customer loyalty" — <span>Tạp chí International Journal of Information Management.</span> [cite: 51]</li>
+                    <li class="doc-item"><strong>Tài liệu 3:</strong> "Consumer Trust in AI-Mediated Services" — <span>Tạp chí Journal of Retailing and Consumer Services.</span> [cite: 52]</li>
+                    <li class="doc-item"><strong>Tài liệu 4:</strong> "Chatbots and Consumer Marketing: A Systematic Review" — <span>Tạp chí Marketing Intelligence & Planning.</span> [cite: 53]</li>
+                    <li class="doc-item"><strong>Tài liệu 5:</strong> "Deep Learning for Recommender Systems in E-commerce" — <span>Kỷ yếu hội thảo khoa học quốc tế IEEE.</span> [cite: 54]</li>
+                </ul>
+            </div>
+
+            <div class="doc-group">
+                <h3><i class="fa-solid fa-book"></i> Nhóm 2: Sách chuyên khảo & Tạp chí chuyên ngành</h3> [cite: 55]
+                <ul class="doc-list">
+                    <li class="doc-item"><strong>Tài liệu 6 (Sách):</strong> "Artificial Intelligence in Marketing" — <span>Tác giả Utpal Dholakia (Nhà xuất bản uy tín Routledge).</span> [cite: 56]</li>
+                    <li class="doc-item"><strong>Tài liệu 7 (Sách):</strong> "Human-Machine Communication" — <span>Tác giả Andrea L. Guzman.</span> [cite: 57]</li>
+                    <li class="doc-item"><strong>Tài liệu 8 (Tạp chí):</strong> "How AI is changing the face of Retail" — <span>Tạp chí Harvard Business Review.</span> [cite: 58]</li>
+                </ul>
+            </div>
+
+            <div class="doc-group">
+                <h3><i class="fa-solid fa-globe"></i> Nhóm 3: Nguồn mở uy tín trên Internet</h3> [cite: 59]
+                <ul class="doc-list">
+                    <li class="doc-item"><strong>Tài liệu 9:</strong> Báo cáo dữ liệu "AI in E-commerce Outlook 2025" — <span>Statista Research Department.</span> [cite: 60]</li>
+                    <li class="doc-item"><strong>Tài liệu 10:</strong> Bài phân tích chiến lược "The Future of AI Shopping Assistants" — <span>Diễn đàn Kinh tế Thế giới (WEF).</span> [cite: 61]</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-scale-balanced"></i> Mô hình đánh giá CRAAP & Phân tích chuyên sâu</h2> [cite: 62]
+            <p style="margin-bottom: 20px;">Mỗi nguồn tài nguyên số được giải phẫu cấu trúc dựa trên 5 trụ cột chất lượng nghiêm ngặt: <strong>Tác giả (Authority)</strong>, <strong>Cơ quan xuất bản (Publisher)</strong>, <strong>Phương pháp (Methodology)</strong>, <strong>Chỉ số trích dẫn (Citations)</strong> và <strong>Tính cập nhật (Currency)</strong>[cite: 63].</p>
+            
+            <div class="topic-box" style="border-left-color: #9f5cff; background: rgba(159, 92, 255, 0.03); color: #d0d0d0;">
+                <p><strong>Nhận xét học thuật chung:</strong> Các bài báo nghiên cứu khoa học xuất bản từ <em>Journal of Business Research</em> hay thư viện số <em>IEEE</em> sở hữu trọng số tin cậy kỹ thuật cao nhất nhờ quy trình bình duyệt ngang hàng (Peer-review) khắt khe và nền tảng phương pháp luận định lượng, thực chứng rõ ràng[cite: 64]. Ngược lại, các nguồn dữ liệu mở như <em>Statista</em> hay <em>WEF</em> cung cấp giá trị tham chiếu thực tiễn, cập nhật nhanh theo xu hướng thị trường nhưng bắt buộc phải đối chiếu chéo (Cross-checking) chặt chẽ với hệ thống lý thuyết nền[cite: 65].</p>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Loại hình tài liệu</th>
+                            <th>Tên tài liệu / Nguồn</th>
+                            <th>Uy tín nguồn / Trích dẫn</th>
+                            <th>Năm phát hành</th>
+                            <th>Phương pháp luận</th>
+                            <th>Độ tin cậy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td style="color: #00bfff;">Bài báo khoa học</td>
+                            <td><strong>Journal of Business Research</strong></td>
+                            <td>Rất cao (Q1 Journal Standard)</td>
+                            <td>2023</td>
+                            <td>Nghiên cứu định lượng, mẫu khảo sát lớn</td>
+                            <td><span class="badge-rating">5/5 (Tối ưu)</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td style="color: #00bfff;">Bài báo khoa học</td>
+                            <td><strong>Int. Journal of Info. Management</strong></td>
+                            <td>Cao (Chỉ số H-index lớn)</td>
+                            <td>2024</td>
+                            <td>Tổng quan hệ thống (Systematic Review)</td>
+                            <td><span class="badge-rating">5/5 (Tối ưu)</span></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td style="color: #e0b0ff;">Sách chuyên khảo</td>
+                            <td><strong>Nhà xuất bản Routledge</strong></td>
+                            <td>Uy tín học thuật quốc tế cao</td>
+                            <td>2022</td>
+                            <td>Xây dựng hệ thống lý thuyết nền tảng</td>
+                            <td><span class="badge-rating" style="color:#e0b0ff; border-color:rgba(224,176,255,0.3)">4.5/5 (Rất tốt)</span></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td style="color: #e0b0ff;">Tạp chí chuyên ngành</td>
+                            <td><strong>Harvard Business Review</strong></td>
+                            <td>Uy tín hàng đầu giới kinh doanh</td>
+                            <td>2024</td>
+                            <td>Phân tích Case study thực tế doanh nghiệp</td>
+                            <td><span class="badge-rating" style="color:#e0b0ff; border-color:rgba(224,176,255,0.3)">4/5 (Tốt)</span></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td style="color: #ffb84d;">Báo cáo thị trường</td>
+                            <td><strong>Statista Research Department</strong></td>
+                            <td>Dữ liệu sơ cấp đáng tin cậy</td>
+                            <td>2025</td>
+                            <td>Thống kê mô tả xu hướng số liệu</td>
+                            <td><span class="badge-rating" style="color:#ffb84d; border-color:rgba(255,184,77,0.3)">3.5/5 (Khá)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div> 
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-filter"></i> Chiến lược tối ưu hóa tìm kiếm & Kiểm tra chéo</h2> [cite: 69]
+            <p style="margin-bottom: 20px; color: #a0a0a0;">Để vượt qua sự nhiễu loạn thông tin trên môi trường số, tôi đã thiết kế thuật toán tìm kiếm và quy trình lọc dữ liệu theo cấu trúc sau[cite: 70]:</p>
+            
+            <div class="method-tags">
+                <div class="step-item" style="border-left-color: #00bfff; margin-bottom: 20px;">
+                    <div class="step-title" style="color: #00bfff;"><i class="fa-solid fa-code"></i> 1. Kỹ thuật toán tử nâng cao (Boolean Query Execution)</div>
+                    <div class="step-desc" style="font-family: monospace; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 6px; margin-top: 5px; color: #fff;">
+                        ("Artificial Intelligence" OR "AI") AND "Consumer Behavior" AND "E-commerce"
+                    </div>
+                    <p style="font-size: 0.95rem; color:#d0d0d0; margin-top: 5px;">Cú pháp này giúp thu hẹp chính xác phạm vi, loại bỏ 90% kết quả rác không chứa sự giao thoa giữa ba thực thể nghiên cứu[cite: 71].</p>
+                </div>
+
+                <div class="step-item" style="border-left-color: #9f5cff; margin-bottom: 20px;">
+                    <div class="step-title" style="color: #9f5cff;"><i class="fa-solid fa-calendar-days"></i> 2. Bộ lọc dòng thời gian (Temporal Filtering Script)</div>
+                    <p style="font-size: 0.95rem; color:#d0d0d0; margin-top: 5px;">Thiết lập cấu hình thời gian chỉ quét các tài liệu xuất bản từ giai đoạn <strong>2021 đến 2026</strong>[cite: 72]. Điều này là bắt buộc để đảm bảo tính thời sự, do các mô hình AI tạo sinh thay đổi và phát triển theo cấp số nhân[cite: 72].</p>
+                </div>
+
+                <div class="step-item" style="border-left-color: #00ffff; margin-bottom: 10px;">
+                    <div class="step-title" style="color: #00ffff;"><i class="fa-solid fa-network-wired"></i> 3. Kỹ thuật truy vết ngược (Back-tracking & Cross-referencing)</div>
+                    <p style="font-size: 0.95rem; color:#d0d0d0; margin-top: 5px;">Khi xác định được một bài báo khoa học chất lượng, tôi lập tức truy xuất sâu vào danh mục tham khảo của chính bài báo đó để tìm ngược lại các tài liệu gốc (Back-tracking), gia tăng độ dày toàn diện cho cơ sở lý luận[cite: 73].</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="border-color: rgba(0, 255, 255, 0.3);">
+            <h2><i class="fa-solid fa-square-poll-vertical"></i> Kết luận học thuật</h2>
+            <p style="color: #d0d0d0; font-size: 1.1rem; line-height: 1.9;">
+                Việc kết hợp chặt chẽ giữa các bài báo học thuật chuyên sâu (đảm bảo tính khoa học vững chắc) cùng các báo cáo thị trường thời gian thực (đảm bảo tính thực tiễn sống động) giúp xây dựng một cái nhìn toàn diện nhất về hành vi mua sắm số[cite: 75]. Trong đó, các công trình thuộc hệ thống dữ liệu toàn cầu danh giá như <strong style="color: #00ffff;">Scopus / Web of Science</strong> vẫn luôn là "tiêu chuẩn vàng" để trích dẫn trong mọi bài nghiên cứu chuyên ngành mang tầm quốc tế[cite: 76].
+            </p>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="index.html#projects" class="back-btn">
+                    <i class="fa-solid fa-arrow-left"></i> Trở lại hệ thống danh mục
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+/* Stars Background Animation generation */
+for(let i=0;i<180;i++){
+    const star=document.createElement("div");
+    star.classList.add("star");
+    star.style.left=Math.random()*100+"%";
+    star.style.animationDuration=(Math.random()*6+4)+"s";
+    star.style.animationDelay=Math.random()*5+"s";
+    document.getElementById("stars").appendChild(star);
+}
+</script>
+
+</body>
+</html>

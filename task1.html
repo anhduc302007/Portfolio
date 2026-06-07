@@ -1,0 +1,457 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 1: Thao tác cơ bản với tệp tin và thư mục - Doãn Anh Đức</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ===== Background ===== */
+.stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:float linear infinite;
+}
+
+@keyframes float{
+    from{ transform:translateY(100vh); opacity:0; }
+    20%{ opacity:1; }
+    to{ transform:translateY(-100px); opacity:0; }
+}
+
+/* ===== Menu (Cố định dạng thu gọn Scrolled chuyên nghiệp cho trang con) ===== */
+.top-menu{
+    position:fixed;
+    top:15px;
+    right: 20px;
+    height: 60px;
+    background:rgba(0,0,0,.8);
+    border:2px solid rgba(255,255,255,.1);
+    border-radius: 30px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap: 15px;
+    padding: 0 20px;
+    z-index:9999;
+    backdrop-filter:blur(12px);
+}
+
+.menu-btn{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border:2px solid rgba(255,255,255,.3);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.menu-btn i {
+    font-size: 1.2rem;
+}
+
+.menu-btn:hover{
+    background:#8a2be2;
+    transform:translateY(-3px);
+}
+
+/* ===== Hero Task header ===== */
+#task-hero {
+    min-height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 100px;
+    position: relative;
+}
+
+.hero-box {
+    width: 95%;
+    max-width: 1500px;
+    padding: 40px;
+    border-radius: 40px;
+    border: 2px solid rgba(159,92,255,.4);
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    position: relative;
+}
+
+.hero-box h1 {
+    font-size: 2.8rem;
+    letter-spacing: 4px;
+    color: white;
+    text-shadow: 0 0 10px #6a00ff, 0 0 30px #6a00ff;
+    margin-bottom: 15px;
+}
+
+.hero-box p {
+    font-size: 1.2rem;
+    color: #00bfff;
+    font-weight: 500;
+}
+
+/* ===== Content Area ===== */
+.content{
+    position:relative;
+    z-index:20;
+    background:#050505;
+    border-radius:60px 60px 0 0;
+    padding: 60px 10%;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(159,92,255,.3);
+    border-radius:20px;
+    padding:40px;
+    line-height:1.8;
+}
+
+.card h2 {
+    color: #9f5cff;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(159,92,255,.2);
+    padding-bottom: 10px;
+}
+
+.card h2 i {
+    color: #00ffff;
+}
+
+/* ===== Step by Step List ===== */
+.step-list {
+    list-style: none;
+}
+
+.step-item {
+    margin-bottom: 35px;
+    padding-left: 20px;
+    border-left: 3px solid rgba(0, 255, 255, 0.4);
+}
+
+.step-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.step-title span {
+    color: #00bfff;
+    margin-right: 10px;
+}
+
+.step-desc {
+    color: #d0d0d0;
+    font-size: 1.05rem;
+    margin-bottom: 15px;
+}
+
+/* ===== Image Style ===== */
+.img-container {
+    width: 100%;
+    max-width: 750px;
+    margin: 15px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(159,92,255,0.2);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    background: #111;
+}
+
+.img-container img {
+    width: 100%;
+    display: block;
+    transition: 0.3s;
+}
+
+.img-container img:hover {
+    transform: scale(1.02);
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    background: rgba(159, 92, 255, 0.2);
+    border: 1px solid #9f5cff;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.back-btn:hover {
+    background: #9f5cff;
+    box-shadow: 0 0 15px #9f5cff;
+    transform: translateY(-2px);
+}
+
+@media(max-width: 1000px){
+    .hero-box h1 { font-size: 2rem; }
+    .content { padding: 40px 5%; }
+    .card { padding: 25px; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav class="top-menu" id="topMenu">
+    <a class="menu-btn" href="index.html#hero" title="Trang chủ">
+        <i class="fa-solid fa-house"></i>
+    </a>
+    <a class="menu-btn" href="index.html#about" title="Thông tin">
+        <i class="fa-solid fa-user"></i>
+    </a>
+    <a class="menu-btn" href="index.html#projects" title="Dự án">
+        <i class="fa-solid fa-briefcase"></i>
+    </a>
+    <a class="menu-btn" href="index.html#contact" title="Liên hệ">
+        <i class="fa-solid fa-envelope"></i>
+    </a>
+</nav>
+
+<section id="task-hero">
+    <div class="hero-box">
+        <h1>TASK 1: THAO TÁC CƠ BẢN VỚI TỆP TIN VÀ THƯ MỤC</h1>
+        <p>Học phần: Nhập môn công nghệ số và ứng dụng trí tuệ nhân tạo</p>
+    </div>
+</section>
+
+<div class="content">
+    <div class="grid-layout">
+        
+        <div class="card">
+            <h2><i class="fa-solid fa-id-card"></i> Thông tin học viên</h2>
+            <p><strong>Họ và tên:</strong> Doãn Anh Đức</p>
+            <p><strong>Mã số sinh viên:</strong> 25020547</p>
+            <p><strong>Mã lớp học phần:</strong> VNU1001_E252006</p>
+            <p><strong>Cơ sở đào tạo:</strong> Trường Đại học Công nghệ - ĐHQGHN (VNU-UET)</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-terminal"></i> Nhật ký thực trình hệ thống</h2>
+            <ul class="step-list">
+
+                <li class="step-item">
+                    <div class="step-title"><span>01.</span> Khởi chạy File Explorer</div>
+                    <div class="step-desc">Sử dụng tổ hợp phím tắt tiêu chuẩn <code>Windows + E</code> hoặc kích hoạt trực tiếp biểu tượng thư mục lưu trữ trên thanh Taskbar hệ thống.</div>
+                    <div class="img-container">
+                        <img src="images/st01.png" alt="Khởi chạy File Explorer qua Taskbar">
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>02.</span> Định tuyến và truy cập phân vùng lưu trữ</div>
+                    <div class="step-desc">Tại cấu trúc phân nhánh bên trái cây thư mục, truy cập vào mục <strong>This PC</strong>, tiến hành điều hướng sang phân vùng ổ đĩa dữ liệu không thuộc hệ thống (ví dụ: ổ <code>D:</code> hoặc ổ <code>E:</code>). Trường hợp thiết bị chỉ có duy nhất phân vùng ổ đĩa cài đặt hệ điều hành, tài nguyên sẽ được trỏ trực tiếp về không gian thư mục <strong>Documents</strong>.</div>
+                    <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 15px auto;">
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st02_1.png" alt="Truy cập phân vùng lưu trữ 1">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st02_2.png" alt="Truy cập phân vùng lưu trữ 2">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>03.</span> Khởi tạo cấu trúc cây thư mục gốc</div>
+                    <div class="step-desc">Thực hiện nhấp chuột phải tại không gian trống của phân vùng lưu trữ, kích hoạt ngữ cảnh lệnh <code>New -> Folder</code>. Tiến hành định danh thư mục gốc theo chuẩn cấu trúc: <code>ThucHanh_Doãn Anh Đức</code>.</div>
+                    <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 15px auto;">
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st03_1.png" alt="Cấu trúc thư mục gốc sau khi tạo 1">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st03_2.png" alt="Cấu trúc thư mục gốc sau khi tạo 2">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>04.</span> Điều hướng sâu vào không gian lưu trữ mới</div>
+                    <div class="step-desc">Thực hiện thao tác nhấp đúp chuột vào thực thể thư mục vừa khởi tạo để truy cập vào môi trường làm việc trống bên trong.</div>
+                    <div class="img-container">
+                        <img src="images/st04.png" alt="Môi trường làm việc trống bên trong thư mục gốc">
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>05.</span> Khởi tạo tệp tin văn bản (Text Document)</div>
+                    <div class="step-desc">Sử dụng lệnh chuột phải tại vùng trống bên trong thư mục mới, chọn <code>New -> Text Document</code>. Tiến hành đặt tên ban đầu cho thực thể tệp tin là <code>GhiChu.txt</code>.</div>
+                    <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 15px auto;">
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st05_1.png" alt="Khởi tạo tệp tin văn bản GhiChu 1">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st05_2.png" alt="Khởi tạo tệp tin văn bản GhiChu 2">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>06.</span> Thực hiện định danh lại tệp tin (Rename File)</div>
+                    <div class="step-desc">Click chuột phải vào đối tượng <code>GhiChu.txt</code> (hoặc bấm chọn và dùng phím <code>F2</code>), chọn tính năng <strong>Rename</strong>. Chuyển đổi định danh cũ sang cấu trúc tên mới: <code>GhiChuQuanTrong.txt</code>.</div>
+                    <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 15px auto;">
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st06_1.png" alt="Tệp tin sau khi được đổi tên thành công 1">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st06_2.png" alt="Tệp tin sau khi được đổi tên thành công 2">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>07.</span> Phân nhánh và xây dựng thư mục con</div>
+                    <div class="step-desc">Bên trong không gian làm việc chính của thư mục mang tên mình, tiếp tục khởi tạo thêm một phân nhánh thư mục con cấp hai với định danh là <code>TaiLieu</code>.</div>
+                    <div class="img-container">
+                        <img src="images/st07.png" alt="Cấu trúc phân nhánh thư mục con Tài Liệu">
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>08.</span> Thao tác sao chép dữ liệu (Copy & Paste)</div>
+                    <div class="step-desc">Click chuột phải vào tệp <code>GhiChuQuanTrong.txt</code> chọn lệnh <strong>Copy</strong> (hoặc phím tắt <code>Ctrl + C</code>). Di chuyển sâu vào thư mục con <code>TaiLieu</code>, sử dụng lệnh <strong>Paste</strong> (hoặc phím tắt <code>Ctrl + V</code>) tại khoảng trống để tạo một bản sao dữ liệu song song.</div>
+                    <div style="display: flex; justify-content: center; gap: 15px; max-width: 800px; margin: 15px auto;">
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st08_1.png" alt="Sao chép dữ liệu vào thư mục con 1">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st08_2.png" alt="Sao chép dữ liệu vào thư mục con 2">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st08_3.png" alt="Sao chép dữ liệu vào thư mục con 3">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>09.</span> Thao tác di chuyển thực thể dữ liệu (Cut & Paste)</div>
+                    <div class="step-desc">Quay lại thư mục gốc ban đầu, khởi tạo một tệp tin văn bản mới định danh là <code>DiChuyen.txt</code>. Click chuột phải chọn lệnh <strong>Cut</strong> (hoặc phím tắt <code>Ctrl + X</code>). Truy cập vào mục thư mục con <code>TaiLieu</code> và thực hiện <strong>Paste</strong>. Khi đó, thực thể tệp tin tại thư mục gốc sẽ được xóa sạch và chỉ lưu vết tại vị trí đích mới.</div>
+                    <div style="display: flex; justify-content: center; gap: 15px; max-width: 1000px; margin: 15px auto;">
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st09_1.png" alt="Di chuyển tệp tin sang không gian lưu trữ mới 1">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st09_2.png" alt="Di chuyển tệp tin sang không gian lưu trữ mới 2">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st09_3.png" alt="Di chuyển tệp tin sang không gian lưu trữ mới 3">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st09_4.png" alt="Di chuyển tệp tin sang không gian lưu trữ mới 4">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>10.</span> Thao tác xóa tệp tin logic thông thường</div>
+                    <div class="step-desc">Tại thư mục con <code>TaiLieu</code>, click chuột phải vào thực thể tệp tin <code>GhiChuQuanTrong.txt</code> chọn lệnh <strong>Delete</strong>. Tệp tin lúc này được hệ thống nén tạm thời đưa về vùng lưu trữ đệm <strong>Recycle Bin</strong> (Thùng rác hệ thống).</div>
+                    <div style="display: flex; justify-content: center; gap: 20px; max-width: 600px; margin: 15px auto;">
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st10_1.png" alt="Thao tác xóa tệp tin logic thông thường 1">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st10_2.png" alt="Thao tác xóa tệp tin logic thông thường 2">
+                        </div>
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>11.</span> Thực thi lệnh xóa vĩnh viễn (Hard Delete)</div>
+                    <div class="step-desc">Lựa chọn thực thể tệp tin <code>DiChuyen.txt</code>, thực hiện nhấn giữ tổ hợp phím <code>Shift + Delete</code>. Một bảng cảnh báo hệ thống sẽ lập tức hiển thị. Khi bấm xác nhận <strong>Có (Yes)</strong>, tệp tin sẽ bị hủy hoàn toàn khỏi cấu trúc nhớ vật lý của ổ đĩa máy tính mà không qua bộ lọc Thùng rác.</div>
+                    <div class="img-container">
+                        <img src="images/st11.png" alt="Bảng hộp thoại cảnh báo xóa vĩnh viễn dữ liệu">
+                    </div>
+                </li>
+
+                <li class="step-item">
+                    <div class="step-title"><span>12.</span> Khôi phục trạng thái dữ liệu (Restore)</div>
+                    <div class="step-desc">Mở ứng dụng <strong>Recycle Bin</strong> ngoài màn hình Desktop. Định vị chính xác tệp tin <code>GhiChuQuanTrong.txt</code> đã bị xóa ở bước 10, click chuột phải và chọn lệnh <strong>Khôi phục (Restore)</strong> để đưa tệp tin về nguyên trạng đường dẫn ban đầu.</div>
+                    <div style="display: flex; justify-content: center; gap: 15px; max-width: 800px; margin: 15px auto;">
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st12_1.png" alt="Khôi phục trạng thái tệp tin từ Thùng rác 1">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st12_2.png" alt="Khôi phục trạng thái tệp tin từ Thùng rác 2">
+                        </div>
+                        <div class="img-container" style="margin: 0; flex: 1;">
+                            <img src="images/st12_3.png" alt="Khôi phục trạng thái tệp tin từ Thùng rác 3">
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+            
+            <div style="text-align: center; margin-top: 50px;">
+                <a href="index.html#projects" class="back-btn">
+                    <i class="fa-solid fa-arrow-left"></i> Trở lại hệ thống danh mục
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+/* Stars Background Animation generation */
+for(let i=0;i<180;i++){
+    const star=document.createElement("div");
+    star.classList.add("star");
+    star.style.left=Math.random()*100+"%";
+    star.style.animationDuration=(Math.random()*6+4)+"s";
+    star.style.animationDelay=Math.random()*5+"s";
+    document.getElementById("stars").appendChild(star);
+}
+</script>
+
+</body>
+</html>

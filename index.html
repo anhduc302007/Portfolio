@@ -1,0 +1,1054 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doãn Anh Đức Portfolio</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ===== Background ===== */
+
+.stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:float linear infinite;
+}
+
+@keyframes float{
+
+    from{
+        transform:translateY(100vh);
+        opacity:0;
+    }
+
+    20%{
+        opacity:1;
+    }
+
+    to{
+        transform:translateY(-100px);
+        opacity:0;
+    }
+
+}
+
+/* ===== Menu ===== */
+
+.top-menu{
+
+    position:fixed;
+
+    top:15px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    width:95%;
+    max-width:1500px;
+
+    height:70px;
+
+    background:rgba(0,0,0,.8);
+
+    border:2px solid rgba(255,255,255,.1);
+
+    border-radius:40px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    gap:40px;
+
+    z-index:9999;
+
+    backdrop-filter:blur(12px);
+
+    transition: all 0.4s ease;
+}
+
+.top-menu.scrolled{
+    width: auto;
+    max-width: none;
+    left: auto;
+    right: 20px;
+    transform: translateX(0);
+    gap: 15px;
+    padding: 0 20px;
+    height: 60px;
+    border-radius: 30px;
+}
+
+.menu-btn{
+
+    width:140px;
+
+    height:42px;
+
+    border-radius:25px;
+
+    border:2px solid rgba(255,255,255,.3);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:.3s;
+
+    gap: 10px;
+
+    overflow: hidden;
+}
+
+.menu-btn i {
+    display: none;
+    font-size: 1.2rem;
+}
+
+.top-menu.scrolled .menu-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    padding: 0;
+    gap: 0;
+}
+
+.top-menu.scrolled .menu-btn .menu-text {
+    display: none;
+}
+
+.top-menu.scrolled .menu-btn i {
+    display: block;
+}
+
+.menu-btn:hover{
+
+    background:#8a2be2;
+
+    transform:translateY(-3px);
+}
+
+/* ===== Hero ===== */
+
+#hero{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding-top:100px;
+
+    position:relative;
+}
+
+.hero-box{
+
+    width:95%;
+
+    max-width:1500px;
+
+    min-height:650px;
+
+    border-radius:60px;
+
+    border:2px solid rgba(159,92,255,.4);
+
+    background:rgba(255,255,255,.03);
+
+    backdrop-filter:blur(15px);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:50px;
+
+    position:relative;
+}
+
+.hero-box::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+    height:700px;
+
+    left:-150px;
+
+    border-radius:50%;
+
+    background:
+    radial-gradient(
+    circle,
+    rgba(106,0,255,.25),
+    transparent 70%
+    );
+
+    animation:pulse 6s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.2);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+.left-panel{
+
+    width:65%;
+
+    z-index:2;
+}
+
+.left-panel h1{
+
+    font-size:4.5rem;
+    white-space: nowrap;
+
+    letter-spacing:10px;
+
+    text-shadow:
+    0 0 10px #6a00ff,
+    0 0 40px #6a00ff,
+    0 0 80px #6a00ff;
+}
+
+#typing{
+
+    font-size:2rem;
+
+    color:#00bfff;
+
+    margin-top:20px;
+
+    min-height:50px;
+}
+
+.desc{
+
+    margin-top:30px;
+
+    max-width:700px;
+
+    line-height:2;
+
+    color:#d0d0d0;
+}
+
+.action-btn{
+
+    margin-top:40px;
+
+    padding:16px 40px;
+
+    border-radius:35px;
+
+    border:2px solid #9f5cff;
+
+    background:none;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:1rem;
+
+    transition:.3s;
+}
+
+.action-btn:hover{
+
+    background:#9f5cff;
+
+    box-shadow:
+    0 0 20px #9f5cff,
+    0 0 50px #9f5cff;
+}
+
+.right-panel{
+
+    width:35%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:30px;
+
+    z-index:2;
+}
+
+/* ===== Digital Clock ===== */
+
+#digitalClock{
+
+    font-size:3rem;
+
+    font-family:monospace;
+
+    border:3px solid rgba(0,255,255,.4);
+
+    padding:20px 40px;
+
+    border-radius:25px;
+
+    color:#00ffff;
+
+    box-shadow:
+    0 0 15px rgba(0,255,255,.3);
+}
+
+/* ===== Content ===== */
+
+.content{
+
+    position:relative;
+
+    z-index:20;
+
+    margin-top:-70px;
+
+    background:#050505;
+
+    border-radius:60px 60px 0 0;
+
+    padding:120px 10%;
+}
+
+.section{
+
+    margin-bottom:120px;
+}
+
+.section h2{
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+    color:#9f5cff;
+}
+
+.card{
+
+    width:100%;
+
+    margin:auto;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(159,92,255,.3);
+
+    border-radius:20px;
+
+    padding:40px;
+
+    line-height:2;
+}
+
+#about .card, #summary .card{
+
+    font-size:1.4rem;
+
+}
+
+/* Style cho danh sách tổng kết */
+.summary-list {
+    padding-left: 20px;
+    margin-top: 15px;
+}
+
+.summary-list li {
+    margin-bottom: 15px;
+    color: #d0d0d0;
+}
+
+.summary-list strong {
+    color: #00bfff;
+}
+
+.project-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3, 1fr);
+
+    gap:30px;
+}
+
+@media(max-width: 900px){
+    .project-grid{
+        grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+.project{
+
+    padding:30px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(159,92,255,.3);
+
+    transition:.3s;
+}
+
+.project:hover{
+
+    transform:translateY(-10px);
+
+    box-shadow:0 0 25px #9f5cff;
+}
+
+.contact{
+
+    text-align:center;
+
+    line-height:2;
+}
+
+/* CHỈNH SỬA CSS GRID PHẦN CONTACT: CỐ ĐỊNH 3 TRÊN - 3 DƯỚI */
+.contact-links{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr); /* Định dạng chuẩn 3 cột */
+    gap:40px 20px;
+    align-items:center;
+    justify-items:center;
+    width:100%;
+    margin:0 auto;
+}
+
+.contact-link{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    width:280px;
+    gap:15px;
+    color:#d0d0d0;
+    text-decoration:none;
+    font-size:1.2rem;
+    transition:.3s;
+}
+
+.contact-link i{
+    font-size:1.8rem;
+    color:#9f5cff;
+    width:35px;
+    text-align:center;
+    transition:.3s;
+}
+
+.contact-link:hover{
+    color:white;
+    transform:translateX(10px);
+}
+
+.contact-link:hover i{
+    color:#00ffff;
+    text-shadow:0 0 10px #00ffff;
+}
+
+@media(max-width:1000px){
+
+    .hero-box{
+
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .left-panel,
+    .right-panel{
+
+        width:100%;
+    }
+
+    .left-panel h1{
+
+        font-size:3rem;
+    }
+
+    .top-menu{
+
+        gap:10px;
+    }
+
+    .top-menu.scrolled{
+        right: 10px;
+        gap: 10px;
+        padding: 0 15px;
+    }
+
+    .menu-btn{
+
+        width:85px;
+        font-size:11px;
+    }
+
+    .top-menu.scrolled .menu-btn {
+        width: 38px;
+        height: 38px;
+    }
+
+    .top-menu.scrolled .menu-btn i {
+        font-size: 0.9rem;
+    }
+
+    /* Đảm bảo responsive mượt mà trên thiết bị di động nhỏ */
+    .contact-links{
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+.project-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 25px;
+    border-radius: 25px;
+    background: rgba(159, 92, 255, 0.2);
+    border: 1px solid #9f5cff;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.project-btn:hover {
+    background: #9f5cff;
+    box-shadow: 0 0 15px #9f5cff;
+    transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav class="top-menu" id="topMenu">
+
+    <a class="menu-btn" href="#hero">
+        <i class="fa-solid fa-house"></i>
+        <span class="menu-text">Home</span>
+    </a>
+    <a class="menu-btn" href="#about">
+        <i class="fa-solid fa-user"></i>
+        <span class="menu-text">About</span>
+    </a>
+    <a class="menu-btn" href="#projects">
+        <i class="fa-solid fa-briefcase"></i>
+        <span class="menu-text">Projects</span>
+    </a>
+    <a class="menu-btn" href="#summary">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span class="menu-text">Summary</span>
+    </a>
+    <a class="menu-btn" href="#contact">
+        <i class="fa-solid fa-envelope"></i>
+        <span class="menu-text">Contact</span>
+    </a>
+
+</nav>
+
+<section id="hero">
+
+    <div class="hero-box">
+
+        <div class="left-panel">
+
+            <h1>DOÃN ANH ĐỨC</h1>
+
+            <div id="typing"></div>
+
+            <p class="desc">
+
+                Sinh viên Kĩ Thuật Máy Tính đam mê
+                phát triển Website, Backend, Server,
+                kiến trúc Microservices và các hệ thống
+                có khả năng phục vụ hàng nghìn người dùng.
+
+            </p>
+
+            <button class="action-btn"
+            onclick="document.getElementById('projects').scrollIntoView()">
+
+                Enter The System
+
+            </button>
+
+        </div>
+
+        <div class="right-panel">
+
+            <canvas id="clock"
+            width="350"
+            height="350"></canvas>
+
+            <div id="digitalClock">
+
+                00:00:00
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<div class="content">
+
+<section class="section" id="about">
+
+<h2>PROFILE</h2>
+
+<div class="card">
+
+Xin chào, tôi là Doãn Anh Đức.
+
+<br><br>
+
+Tôi là sinh viên Kỹ thuật Máy tính với niềm đam mê khám phá cách công nghệ có thể kết nối con người và giải quyết những bài toán thực tế. Điều khiến tôi hứng thú không chỉ là viết ra những dòng mã, mà còn là quá trình biến một ý tưởng thành một sản phẩm hoàn chỉnh có thể vận hành ổn định và phục vụ nhiều người dùng.
+
+<br><br>
+
+Tôi đặc biệt quan tâm đến phát triển Web, Backend, hệ thống Server và kiến trúc Microservices. Hiện tại, tôi đang nghiên cứu các giải pháp xây dựng hệ thống thi trực tuyến, nền tảng lưu trữ dữ liệu và những mô hình hạ tầng có khả năng mở rộng cao.
+
+<br><br>
+
+Mỗi dự án đối với tôi không chỉ là một bài tập kỹ thuật mà còn là cơ hội để học hỏi, cải thiện tư duy giải quyết vấn đề và tạo ra giá trị thực tế. Mục tiêu của tôi là trở thành một kỹ sư công nghệ có khả năng xây dựng những hệ thống đáng tin cậy, đồng thời phát triển các sản phẩm mang dấu ấn riêng của mình.
+
+</div>
+
+</section>
+
+<section class="section" id="projects">
+
+<h2>PROJECTS</h2>
+
+<div class="project-grid">
+
+<div class="project">
+
+<h3>Task 1: Thao tác cơ bản với tệp tin và thư mục</h3>
+
+<br>
+
+Trình bày cấu trúc của 1 thư mục tối ưu và quy tắc đặt tên tệp đã thiết lập kèm ảnh minh họa.
+
+<br><br>
+
+<a href="task1.html" class="project-btn">
+        Xem chi tiết
+    </a>
+
+</div>
+
+<div class="project">
+
+<h3>Task 2: Tìm kiếm và đánh giá thông tin học thuật</h3>
+
+<br>
+
+Trình bày kết quả tìm kiếm học thuật bằng các toán tử nâng cao và bảng đánh giá nguồn tin đã thực hiện.
+
+<br><br>
+
+<a href="task2.html" class="project-btn">
+        Xem chi tiết
+    </a>
+
+</div>
+
+<div class="project">
+
+<h3>Task 3: Viết Prompt hiệu quả cho tác vụ học tập</h3>
+
+<br>
+
+Trình bày sự so sánh giữa Prompt ban đầu và Prompt cải tiến cùng kết quả đầu ra từ AI.
+
+<br><br>
+
+<a href="task3.html" class="project-btn">
+        Xem chi tiết
+    </a>
+
+</div>
+
+<div class="project">
+
+<h3>Task 4: Sử dụng công cụ hợp tác trực tuyến cho dự án nhóm</h3>
+
+<br>
+
+Trình bày minh chứng về việc sử dụng công cụ quản lý dự án nhóm và cách thức phối hợp trực tuyến.
+
+<br><br>
+
+<a href="task4.html" class="project-btn">
+        Xem chi tiết
+    </a>
+
+</div>
+
+<div class="project">
+
+<h3>Task 5: Sử dụng AI tạo sinh để hỗ trợ sáng tạo nội dung</h3>
+
+<br>
+
+Trưng bày sản phẩm nội dung số hoàn thiện (hình ảnh, video hoặc bài viết) được hỗ trợ bởi AI.
+
+<br><br>
+
+<a href="task5.html" class="project-btn">
+        Xem chi tiết
+    </a>
+
+</div>
+
+<div class="project">
+
+<h3>Task 6: Sử dụng AI có trách nhiệm trong học tập và nghiên cứu</h3>
+
+<br>
+
+Trình bày bộ nguyên tắc cá nhân về sử dụng AI có trách nhiệm dựa trên các nghiên cứu đã thực hiện.
+
+<br><br>
+
+<a href="task6.html" class="project-btn">
+        Xem chi tiết
+    </a>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="section" id="summary">
+
+<h2>SUMMARY</h2>
+
+<div class="card">
+
+Hành trình hoàn thiện chuỗi các bài thực hành học phần giúp tôi xây dựng tư duy quản trị hệ thống và làm chủ các công cụ chuyển đổi số một cách toàn diện:
+
+<ul class="summary-list">
+    <li><strong>Quản trị dữ liệu & Hạ tầng cá nhân:</strong> Thiết lập cấu trúc lưu trữ phân tầng, chuẩn hóa quy tắc đặt tên tệp để tối ưu hóa không gian làm việc số một cách khoa học.</li>
+    <li><strong>Nghiên cứu & Khai thác tri thức:</strong> Ứng dụng các toán tử tìm kiếm nâng cao để sàng lọc tài liệu và vận dụng mô hình CRAAP đánh giá độ tin cậy của nguồn tin hàn lâm.</li>
+    <li><strong>Kỹ nghệ Prompt Engineering:</strong> Tối ưu hóa cấu trúc câu lệnh theo mô hình phân tầng để chuyển đổi trí tuệ nhân tạo thành cộng sự đắc lực trong học tập.</li>
+    <li><strong>Hợp tác trực tuyến & Quản trị dự án:</strong> Làm chủ các công cụ quản lý Kanban, phân rã đầu việc và duy trì luồng giao tiếp bất đồng bộ hiệu quả khi vận hành dự án nhóm.</li>
+    <li><strong>Khai phá AI tạo sinh & Sáng tạo số:</strong> Phối hợp linh hoạt chuỗi đa nền tảng trí tuệ nhân tạo để kiến tạo và sản xuất các ấn phẩm truyền thông số đồng bộ, chất lượng cao.</li>
+    <li><strong>Đạo đức công nghệ & Liêm chính học thuật:</strong> Cam kết vận hành theo bộ nguyên tắc cá nhân nghiêm ngặt về sử dụng AI có trách nhiệm, bảo vệ giá trị liêm chính trong môi trường đại học.</li>
+</ul>
+
+</div>
+
+</section>
+
+<section class="section" id="contact">
+
+<h2>CONTACT</h2>
+
+<div class="card contact">
+
+<div class="contact-links">
+
+    <a href="mailto:anhducdoan.2007@gmail.com" class="contact-link" target="_blank">
+        <i class="fa-solid fa-envelope"></i>
+        <span>anhducdoan.2007@gmail.com</span>
+    </a>
+
+    <a href="tel:+84396403589" class="contact-link" target="_blank">
+        <i class="fa-solid fa-phone"></i>
+        <span>+84 396 403 589</span>
+    </a>
+
+    <a href="https://fb.com/doandwc.207.208" class="contact-link" target="_blank">
+        <i class="fa-brands fa-facebook"></i>
+        <span>Facebook</span>
+    </a>
+
+    <a href="https://instagram.com/z_wdxwcc" class="contact-link" target="_blank">
+        <i class="fa-brands fa-instagram"></i>
+        <span>Instagram</span>
+    </a>
+
+    <a href="https://tiktok.com/@doanduc_3011" class="contact-link" target="_blank">
+        <i class="fa-brands fa-tiktok"></i>
+        <span>TikTok</span>
+    </a>
+
+    <a href="https://maps.google.com/?q=Hanoi, Vietnam" class="contact-link" target="_blank">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Hà Nội, Việt Nam</span>
+    </a>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+<script>
+
+/* Menu Scroll Effect */
+const topMenu = document.getElementById("topMenu");
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 50) {
+        topMenu.classList.add("scrolled");
+    } else {
+        topMenu.classList.remove("scrolled");
+    }
+});
+
+/* Typing */
+
+const texts=[
+"Web Developer",
+"Backend Developer",
+"Server Architect",
+"Future Entrepreneur"
+];
+
+let index=0;
+let charIndex=0;
+
+const typing=document.getElementById("typing");
+
+function type(){
+
+if(charIndex<texts[index].length){
+
+typing.innerHTML+=texts[index].charAt(charIndex);
+
+charIndex++;
+
+setTimeout(type,100);
+
+}else{
+
+setTimeout(erase,1500);
+
+}
+
+}
+
+function erase(){
+
+if(charIndex>0){
+
+typing.innerHTML=
+texts[index].substring(0,charIndex-1);
+
+charIndex--;
+
+setTimeout(erase,50);
+
+}else{
+
+index++;
+
+if(index>=texts.length){
+
+index=0;
+
+}
+
+setTimeout(type,300);
+
+}
+
+}
+
+type();
+
+/* Stars */
+
+for(let i=0;i<180;i++){
+
+const star=document.createElement("div");
+
+star.classList.add("star");
+
+star.style.left=Math.random()*100+"%";
+
+star.style.animationDuration=
+(Math.random()*6+4)+"s";
+
+star.style.animationDelay=
+Math.random()*5+"s";
+
+document
+.getElementById("stars")
+.appendChild(star);
+
+}
+
+/* Digital Clock */
+
+function updateClock(){
+
+const now=new Date();
+
+const h=
+String(now.getHours())
+.padStart(2,'0');
+
+const m=
+String(now.getMinutes())
+.padStart(2,'0');
+
+const s=
+String(now.getSeconds())
+.padStart(2,'0');
+
+document.getElementById(
+"digitalClock"
+).innerText=
+`${h}:${m}:${s}`;
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+/* Analog Clock */
+
+const canvas=
+document.getElementById("clock");
+
+const ctx=
+canvas.getContext("2d");
+
+function drawClock(){
+
+ctx.clearRect(0,0,350,350);
+
+const now=new Date();
+
+const sec=now.getSeconds();
+const min=now.getMinutes();
+const hr=now.getHours()%12;
+
+ctx.beginPath();
+ctx.arc(175,175,140,0,Math.PI*2);
+
+ctx.strokeStyle="#dca7ff";
+ctx.lineWidth=12;
+ctx.stroke();
+
+function hand(angle,length,width,color){
+
+ctx.beginPath();
+
+ctx.lineWidth=width;
+
+ctx.moveTo(175,175);
+
+ctx.lineTo(
+175+Math.cos(angle)*length,
+175+Math.sin(angle)*length
+);
+
+ctx.strokeStyle=color;
+
+ctx.stroke();
+}
+
+hand(
+(hr*Math.PI/6)-Math.PI/2,
+70,
+10,
+"white"
+);
+
+hand(
+(min*Math.PI/30)-Math.PI/2,
+100,
+7,
+"white"
+);
+
+hand(
+(sec*Math.PI/30)-Math.PI/2,
+120,
+3,
+"#00ffff"
+);
+
+}
+
+setInterval(drawClock,1000);
+
+drawClock();
+
+</script>
+
+</body>
+</html>

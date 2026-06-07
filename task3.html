@@ -1,0 +1,532 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 3: Viết Prompt hiệu quả cho tác vụ học tập - Doãn Anh Đức</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ===== Background ===== */
+.stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:float linear infinite;
+}
+
+@keyframes float{
+    from{ transform:translateY(100vh); opacity:0; }
+    20%{ opacity:1; }
+    to{ transform:translateY(-100px); opacity:0; }
+}
+
+/* ===== Menu ===== */
+.top-menu{
+    position:fixed;
+    top:15px;
+    right: 20px;
+    height: 60px;
+    background:rgba(0,0,0,.8);
+    border:2px solid rgba(255,255,255,.1);
+    border-radius: 30px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap: 15px;
+    padding: 0 20px;
+    z-index:9999;
+    backdrop-filter:blur(12px);
+}
+
+.menu-btn{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border:2px solid rgba(255,255,255,.3);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.menu-btn i {
+    font-size: 1.2rem;
+}
+
+.menu-btn:hover{
+    background:#8a2be2;
+    transform:translateY(-3px);
+}
+
+/* ===== Hero Header ===== */
+#task-hero {
+    min-height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 100px;
+    position: relative;
+}
+
+.hero-box {
+    width: 95%;
+    max-width: 1500px;
+    padding: 40px;
+    border-radius: 40px;
+    border: 2px solid rgba(159,92,255,.4);
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    position: relative;
+}
+
+.hero-box h1 {
+    font-size: 2.6rem;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow: 0 0 10px #6a00ff, 0 0 30px #6a00ff;
+    margin-bottom: 15px;
+}
+
+.hero-box p {
+    font-size: 1.2rem;
+    color: #00bfff;
+    font-weight: 500;
+}
+
+/* ===== Content Area ===== */
+.content{
+    position:relative;
+    z-index:20;
+    background:#050505;
+    border-radius:60px 60px 0 0;
+    padding: 60px 10%;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(159,92,255,.3);
+    border-radius:20px;
+    padding:40px;
+    line-height:1.8;
+}
+
+.card h2 {
+    color: #9f5cff;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(159,92,255,.2);
+    padding-bottom: 10px;
+}
+
+.card h2 i {
+    color: #00ffff;
+}
+
+/* ===== Prompt Showcase Styles ===== */
+.prompt-showcase {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+
+@media(max-width: 900px) {
+    .prompt-showcase { grid-template-columns: 1fr; }
+}
+
+.prompt-box {
+    background: rgba(255,255,255,0.02);
+    border-radius: 12px;
+    padding: 20px;
+    border-top: 4px solid #fff;
+    transition: 0.3s;
+}
+
+.prompt-box.basic { border-top-color: #ff4d4d; background: rgba(255, 77, 77, 0.02); }
+.prompt-box.improved { border-top-color: #ffb84d; background: rgba(255, 184, 77, 0.02); }
+.prompt-box.advanced { border-top-color: #00ffff; background: rgba(0, 255, 255, 0.02); }
+
+.prompt-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.prompt-tag {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+.basic .prompt-tag { color: #ff4d4d; }
+.improved .prompt-tag { color: #ffb84d; }
+.advanced .prompt-tag { color: #00ffff; }
+
+.prompt-text {
+    font-family: monospace;
+    background: rgba(0,0,0,0.4);
+    padding: 10px;
+    border-radius: 6px;
+    margin: 10px 0;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.prompt-result {
+    font-size: 0.9rem;
+    color: #b0b0b0;
+}
+
+.prompt-result i { margin-right: 5px; }
+
+.analysis-note {
+    background: rgba(159, 92, 255, 0.05);
+    border: 1px dashed rgba(159, 92, 255, 0.4);
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #d0d0d0;
+}
+
+/* ===== Engineering Principles Grid ===== */
+.principles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 15px;
+}
+
+@media(max-width: 768px) {
+    .principles-grid { grid-template-columns: 1fr; }
+}
+
+.principle-item {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    gap: 15px;
+}
+
+.principle-icon {
+    font-size: 1.5rem;
+    color: #00bfff;
+}
+
+.principle-content h4 {
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.principle-content p {
+    color: #a0a0a0;
+    font-size: 0.95rem;
+}
+
+/* ===== Table Style ===== */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 12px;
+    border: 1px solid rgba(159, 92, 255, 0.3);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+th, td {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+th {
+    background: rgba(159, 92, 255, 0.15);
+    color: #9f5cff;
+    font-weight: 600;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    background: rgba(159, 92, 255, 0.2);
+    border: 1px solid #9f5cff;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.back-btn:hover {
+    background: #9f5cff;
+    box-shadow: 0 0 15px #9f5cff;
+    transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav class="top-menu" id="topMenu">
+    <a class="menu-btn" href="index.html#hero" title="Trang chủ">
+        <i class="fa-solid fa-house"></i>
+    </a>
+    <a class="menu-btn" href="index.html#about" title="Thông tin">
+        <i class="fa-solid fa-user"></i>
+    </a>
+    <a class="menu-btn" href="index.html#projects" title="Dự án">
+        <i class="fa-solid fa-briefcase"></i>
+    </a>
+    <a class="menu-btn" href="index.html#contact" title="Liên hệ">
+        <i class="fa-solid fa-envelope"></i>
+    </a>
+</nav>
+
+<section id="task-hero">
+    <div class="hero-box">
+        <h1>TASK 3: KỸ NGHỆ VIẾT PROMPT HIỆU QUẢ TRONG HỌC TẬP</h1>
+        <p>Học phần: Nhập môn công nghệ số và ứng dụng trí tuệ nhân tạo</p>
+    </div>
+</section>
+
+<div class="content">
+    <div class="grid-layout">
+        
+        <div class="card">
+            <h2><i class="fa-solid fa-bullseye"></i> Mục tiêu thử nghiệm</h2>
+            <p style="color: #d0d0d0;">Trong kỷ nguyên số, các mô hình ngôn ngữ lớn (LLMs) đang trở thành trợ lý đắc lực. Tuy nhiên, hiệu quả đầu ra phụ thuộc hoàn toàn vào tư duy thiết kế cấu trúc đầu vào (Prompt). Mục tiêu của nghiên cứu thực hành này là:</p>
+            <ul style="padding-left: 20px; color: #a0a0a0; margin-top: 10px;">
+                <li>Hiểu rõ vai trò của Prompt trong việc định hướng thuật toán suy nghĩ của AI.</li>
+                <li>Thực hành xây dựng, phân tầng các loại Prompt từ cơ bản đến chuyên sâu.</li>
+                <li>Đánh giá hiệu quả định lượng đầu ra để rút ra bộ nguyên tắc tối ưu hóa học tập.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-vials"></i> Khung thực hành & Tiến trình cải tiến Prompt</h2>
+            <p style="color: #a0a0a0; margin-bottom: 20px;">Dưới đây là 3 kịch bản ứng dụng thực tế trong học tập kỹ thuật được thử nghiệm qua 3 cấp độ Prompt:</p>
+
+            <h3 style="color: #9f5cff; margin-bottom: 10px;"><i class="fa-solid fa-file-lines"></i> Kịch bản 1: Tóm tắt tài liệu học thuật chuyên ngành</h3>
+            <div class="prompt-showcase">
+                <div class="prompt-box basic">
+                    <span class="prompt-tag">Cơ bản</span>
+                    <div class="prompt-text">"Tóm tắt đoạn văn sau..."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-triangle-exclamation"></i> Kết quả ngắn, chung chung, dễ mất trọng tâm kỹ thuật.</div>
+                </div>
+                <div class="prompt-box improved">
+                    <span class="prompt-tag">Cải tiến</span>
+                    <div class="prompt-text">"Tóm tắt đoạn văn trong 5–7 câu, nêu rõ các ý chính..."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-check"></i> Nội dung đầy đủ hơn, có cấu trúc dòng chảy rõ ràng.</div>
+                </div>
+                <div class="prompt-box advanced">
+                    <span class="prompt-tag">Nâng cao</span>
+                    <div class="prompt-text">"Đóng vai là một sinh viên chuyên ngành, hãy tóm tắt đoạn văn, liệt kê các ý chính dưới dạng bullet-point, diễn giải lại các định niệm khó và đưa ra ví dụ minh họa trực quan..."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-star" style="color: #00ffff;"></i> Kết quả tối ưu, dễ hiểu, hệ thống hóa cao để ôn tập.</div>
+                </div>
+            </div>
+            <div class="analysis-note" style="margin-bottom: 30px;">
+                <strong>Nhận xét chuyên sâu:</strong> Prompt càng chi tiết, có định hướng rõ ràng thì kết quả trả về từ LLM càng tiệm cận độ chính xác mong muốn.
+            </div>
+
+            <h3 style="color: #9f5cff; margin-bottom: 10px;"><i class="fa-solid fa-brain"></i> Kịch bản 2: Giải thích khái niệm kỹ thuật phức tạp (Blockchain)</h3>
+            <div class="prompt-showcase">
+                <div class="prompt-box basic">
+                    <span class="prompt-tag">Cơ bản</span>
+                    <div class="prompt-text">"Giải thích về hệ thống Blockchain."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-triangle-exclamation"></i> Đầu ra mang tính học thuật nặng, khó tiếp cận cho người mới.</div>
+                </div>
+                <div class="prompt-box improved">
+                    <span class="prompt-tag">Cải tiến</span>
+                    <div class="prompt-text">"Giải thích đơn giản về Blockchain và đưa ra ví dụ thực tế..."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-check"></i> Giảm tải thuật ngữ, dễ tiếp cận ở mức độ tổng quan.</div>
+                </div>
+                <div class="prompt-box advanced">
+                    <span class="prompt-tag">Nâng cao</span>
+                    <div class="prompt-text">"Đóng vai một Giảng viên Công nghệ thông tin, hãy giải thích Blockchain theo cấu trúc phân tầng logic: Định nghĩa cốt lõi, Cơ chế vận hành hệ thống, Ví dụ ẩn dụ thực tế và Các ứng dụng thực tiễn trong ngành..."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-star" style="color: #00ffff;"></i> Nội dung logic tuyệt đối, cấu trúc chuẩn mực, cực kỳ dễ học.</div>
+                </div>
+            </div>
+            <div class="analysis-note" style="margin-bottom: 30px;">
+                <strong>Nhận xét chuyên sâu:</strong> Việc xác định rõ đối tượng tiếp nhận và cấu trúc phân cấp giúp tăng hiệu quả tiếp thu kiến thức rõ rệt.
+            </div>
+
+            <h3 style="color: #9f5cff; margin-bottom: 10px;"><i class="fa-solid fa-graduation-cap"></i> Kịch bản 3: Khởi tạo hệ thống câu hỏi ôn tập (Lập trình C)</h3>
+            <div class="prompt-showcase">
+                <div class="prompt-box basic">
+                    <span class="prompt-tag">Cơ bản</span>
+                    <div class="prompt-text">"Tạo câu hỏi ôn tập về lập trình C."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-triangle-exclamation"></i> Số lượng ít, không đa dạng các cấu trúc dữ liệu.</div>
+                </div>
+                <div class="prompt-box improved">
+                    <span class="prompt-tag">Cải tiến</span>
+                    <div class="prompt-text">"Tạo 10 câu hỏi gồm cả lý thuyết và bài tập lập trình C..."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-check"></i> Đã có sự phân loại cấu trúc đề thi rõ ràng hơn.</div>
+                </div>
+                <div class="prompt-box advanced">
+                    <span class="prompt-tag">Nâng cao</span>
+                    <div class="prompt-text">"Đóng vai Giáo viên ra đề, hãy tạo bộ câu hỏi gồm cả trắc nghiệm, tự luận và bài tập thực hành lập trình C, yêu cầu đính kèm đáp án chi tiết và phân hóa rõ rệt các độ khó (Dễ, Trung bình, Khó)..."</div>
+                    <div class="prompt-result"><i class="fa-solid fa-star" style="color: #00ffff;"></i> Sản phẩm hoàn hảo, chất lượng cao, có thể dùng trực tiếp để ôn thi học phần.</div>
+                </div>
+            </div>
+            <div class="analysis-note">
+                <strong>Nhận xét chuyên sâu:</strong> Kiểm soát chặt chẽ tham số đầu vào (Cụ thể hóa yêu cầu) đồng nghĩa với việc làm chủ hoàn toàn chất lượng đầu ra.
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-code-compare"></i> Bảng tổng hợp so sánh các cấp độ Prompt</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cấp độ Prompt</th>
+                            <th>Đặc tính kỹ thuật</th>
+                            <th>Ưu điểm</th>
+                            <th>Hạn chế</th>
+                            <th>Tính ứng dụng thực tế</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color: #ff4d4d; font-weight: bold;">Cơ bản</td>
+                            <td>Ngắn, thiếu ngữ cảnh và vai trò</td>
+                            <td>Tốc độ xử lý nhanh</td>
+                            <td>Sơ sài, mất ý, dễ bị "ảo giác AI"</td>
+                            <td>Tra cứu nhanh các thông tin đơn giản</td>
+                        </tr>
+                        <tr>
+                            <td style="color: #ffb84d; font-weight: bold;">Cải tiến</td>
+                            <td>Có ràng buộc số lượng và định dạng</td>
+                            <td>Cân bằng, rõ ý hơn</td>
+                            <td>Chưa tối ưu được tư duy chuyên sâu</td>
+                            <td>Đọc hiểu tài liệu ở mức độ phổ thông</td>
+                        </tr>
+                        <tr>
+                            <td style="color: #00ffff; font-weight: bold;">Nâng cao</td>
+                            <td>Cấu trúc hóa đầy đủ, gán vai trò, phân bước</td>
+                            <td>Chất lượng tối ưu, chiều sâu chuyên môn cao</td>
+                            <td>Mất thời gian thiết kế cấu trúc ban đầu</td>
+                            <td>Nghiên cứu học thuật, ôn thi chuyên ngành</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-gears"></i> Nguyên lý phân tích: "Hướng dẫn AI cách suy nghĩ"</h2>
+            <p style="color: #a0a0a0;">Bản chất của kỹ nghệ Prompt là tạo ra một thuật toán định hướng tư duy logic cho AI thông qua các trụ cột chính:</p>
+            
+            <div class="principles-grid">
+                <div class="principle-item">
+                    <div class="principle-icon"><i class="fa-solid fa-circle-nodes"></i></div>
+                    <div class="principle-content">
+                        <h4>Ngữ cảnh rõ ràng (Contextualization)</h4>
+                        <p>Cung cấp nền tảng bài toán giúp AI xác định đúng vùng không gian tri thức cần truy xuất.</p>
+                    </div>
+                </div>
+                <div class="principle-item">
+                    <div class="principle-icon"><i class="fa-solid fa-user-ninja"></i></div>
+                    <div class="principle-content">
+                        <h4>Gán vai trò chuyên gia (Role Assignment)</h4>
+                        <p>Kích hoạt phong cách ngôn ngữ, văn phong và lăng kính tư duy phù hợp với chuyên ngành.</p>
+                    </div>
+                </div>
+                <div class="principle-item">
+                    <div class="principle-icon"><i class="fa-solid fa-sitemap"></i></div>
+                    <div class="principle-content">
+                        <h4>Cấu trúc hóa đầu ra (Output Structuring)</h4>
+                        <p>Định dạng dữ liệu trả về theo form (Markdown, Bullet-points, Codeblock) để tối ưu hóa việc lưu trữ.</p>
+                    </div>
+                </div>
+                <div class="principle-item">
+                    <div class="principle-icon"><i class="fa-solid fa-sliders"></i></div>
+                    <div class="principle-content">
+                        <h4>Ràng buộc tham số (Constraints Setting)</h4>
+                        <p>Thiết lập giới hạn (số câu, độ khó, điều cần tránh) để loại bỏ hoàn toàn các thông tin rác.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="border-color: rgba(0, 255, 255, 0.3); background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(138,43,226,0.05) 100%);">
+            <h2><i class="fa-solid fa-clipboard-check"></i> Tuyên ngôn & Kết luận thực hành</h2>
+            <p style="color: #d0d0d0; font-size: 1.1rem; line-height: 1.9;">
+                Làm chủ kỹ nghệ viết Prompt không đơn thuần là học cách tương tác với máy móc, mà đó chính là năng lực <strong>tư duy tổ chức công việc và hệ thống hóa kiến thức</strong> của thế hệ kỹ sư công nghệ mới. Việc rèn luyện kỹ năng này giúp tối ưu hóa hiệu suất tự học lên gấp nhiều lần, biến trí tuệ nhân tạo thành một trợ lý cá nhân đắc lực trên hành trình chinh phục tri thức học thuật chuyên sâu.
+            </p>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="index.html#projects" class="back-btn">
+                    <i class="fa-solid fa-arrow-left"></i> Trở lại hệ thống danh mục
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+/* Stars Background Animation generation */
+for(let i=0;i<180;i++){
+    const star=document.createElement("div");
+    star.classList.add("star");
+    star.style.left=Math.random()*100+"%";
+    star.style.animationDuration=(Math.random()*6+4)+"s";
+    star.style.animationDelay=Math.random()*5+"s";
+    document.getElementById("stars").appendChild(star);
+}
+</script>
+
+</body>
+</html>

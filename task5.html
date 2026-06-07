@@ -1,0 +1,498 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 5: Sử dụng AI tạo sinh hỗ trợ sáng tạo nội dung số - Doãn Anh Đức</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ===== Background ===== */
+.stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:float linear infinite;
+}
+
+@keyframes float{
+    from{ transform:translateY(100vh); opacity:0; }
+    20%{ opacity:1; }
+    to{ transform:translateY(-100px); opacity:0; }
+}
+
+/* ===== Menu ===== */
+.top-menu{
+    position:fixed;
+    top:15px;
+    right: 20px;
+    height: 60px;
+    background:rgba(0,0,0,.8);
+    border:2px solid rgba(255,255,255,.1);
+    border-radius: 30px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap: 15px;
+    padding: 0 20px;
+    z-index:9999;
+    backdrop-filter:blur(12px);
+}
+
+.menu-btn{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border:2px solid rgba(255,255,255,.3);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.menu-btn i {
+    font-size: 1.2rem;
+}
+
+.menu-btn:hover{
+    background:#8a2be2;
+    transform:translateY(-3px);
+}
+
+/* ===== Hero Header ===== */
+#task-hero {
+    min-height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 100px;
+    position: relative;
+}
+
+.hero-box {
+    width: 95%;
+    max-width: 1500px;
+    padding: 40px;
+    border-radius: 40px;
+    border: 2px solid rgba(159,92,255,.4);
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    position: relative;
+}
+
+.hero-box h1 {
+    font-size: 2.6rem;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow: 0 0 10px #6a00ff, 0 0 30px #6a00ff;
+    margin-bottom: 15px;
+}
+
+.hero-box p {
+    font-size: 1.2rem;
+    color: #00bfff;
+    font-weight: 500;
+}
+
+/* ===== Content Area ===== */
+.content{
+    position:relative;
+    z-index:20;
+    background:#050505;
+    border-radius:60px 60px 0 0;
+    padding: 60px 10%;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(159,92,255,.3);
+    border-radius:20px;
+    padding:40px;
+    line-height:1.8;
+}
+
+.card h2 {
+    color: #9f5cff;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(159,92,255,.2);
+    padding-bottom: 10px;
+}
+
+.card h2 i {
+    color: #00ffff;
+}
+
+/* ===== Vertical Pipeline Layout (Sắp xếp hàng dọc để chèn ảnh) ===== */
+.pipeline-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    margin-top: 25px;
+}
+
+.pipeline-node-vertical {
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    position: relative;
+    transition: 0.3s;
+}
+
+.pipeline-node-vertical:hover {
+    border-color: rgba(159, 92, 255, 0.4);
+    box-shadow: 0 8px 30px rgba(138, 43, 226, 0.1);
+}
+
+.node-step-badge {
+    position: absolute;
+    top: -14px;
+    left: 25px;
+    background: linear-gradient(90deg, #8a2be2, #00ffff);
+    color: #fff;
+    padding: 4px 18px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.node-header-vertical {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.node-icon-large {
+    font-size: 2rem;
+}
+.chatgpt-color { color: #10a37f; }
+.gemini-color { color: #1a73e8; }
+.copilot-color { color: #0078d4; }
+
+.node-header-vertical h3 {
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+.prompt-title {
+    font-size: 0.95rem;
+    color: #00bfff;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.prompt-box-vertical {
+    background: rgba(0, 0, 0, 0.5);
+    border-left: 4px solid #9f5cff;
+    padding: 15px;
+    border-radius: 0 12px 12px 0;
+    font-family: Consolas, Monaco, monospace;
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.node-output-vertical {
+    font-size: 1rem;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+}
+
+/* Khung chứa ảnh thực hành dành cho Đức */
+.image-placeholder-container {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.image-placeholder-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid rgba(159, 92, 255, 0.2);
+}
+
+/* ===== Table Style ===== */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 12px;
+    border: 1px solid rgba(159, 92, 255, 0.3);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+th, td {
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+th {
+    background: rgba(159, 92, 255, 0.15);
+    color: #9f5cff;
+    font-weight: 600;
+}
+
+/* ===== Highlight Boxes ===== */
+.insight-box {
+    background: rgba(0, 255, 255, 0.03);
+    border: 1px dashed rgba(0, 255, 255, 0.3);
+    padding: 20px;
+    border-radius: 12px;
+    margin-top: 15px;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    background: rgba(159, 92, 255, 0.2);
+    border: 1px solid #9f5cff;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.back-btn:hover {
+    background: #9f5cff;
+    box-shadow: 0 0 15px #9f5cff;
+    transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav class="top-menu" id="topMenu">
+    <a class="menu-btn" href="index.html#hero" title="Trang chủ">
+        <i class="fa-solid fa-house"></i>
+    </a>
+    <a class="menu-btn" href="index.html#about" title="Thông tin">
+        <i class="fa-solid fa-user"></i>
+    </a>
+    <a class="menu-btn" href="index.html#projects" title="Dự án">
+        <i class="fa-solid fa-briefcase"></i>
+    </a>
+    <a class="menu-btn" href="index.html#contact" title="Liên hệ">
+        <i class="fa-solid fa-envelope"></i>
+    </a>
+</nav>
+
+<section id="task-hero">
+    <div class="hero-box">
+        <h1>TASK 5: SỬ DỤNG AI TẠO SINH TRONG SÁNG TẠO NỘI DUNG SỐ</h1>
+        <p>Học phần: Nhập môn công nghệ số và ứng dụng trí tuệ nhân tạo</p>
+    </div>
+</section>
+
+<div class="content">
+    <div class="grid-layout">
+        
+        <div class="card">
+            <h2><i class="fa-solid fa-bullseye"></i> Mục tiêu nghiên cứu & Thử nghiệm</h2>
+            <p style="color: #d0d0d0;">Thực hành làm chủ và thực thi kỹ nghệ phối hợp chéo cấu trúc giữa các nền tảng trí tuệ nhân tạo (Cross-platform Prompting). Thử nghiệm khai thác đồng bộ năng lực của 3 mô hình ngôn ngữ lớn hàng đầu nhằm tối ưu hóa chuỗi quy trình xuất bản nội dung văn bản học thuật và thiết kế tài nguyên số cho Portfolio cá nhân.</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-shuffle"></i> Quy trình phối hợp đa nền tảng (Cross-Platform Pipeline)</h2>
+            <p style="color: #a0a0a0;">Tiến trình xử lý dữ liệu liên tục tuần tự theo trục dọc hệ thống:</p>
+            
+            <div class="pipeline-vertical">
+                
+                <div class="pipeline-node-vertical" style="border-color: rgba(16, 163, 127, 0.25);">
+                    <div class="node-step-badge">BƯỚC 1: KHỞI TẠO Ý TƯỞNG CỐT LÕI</div>
+                    <div class="node-header-vertical">
+                        <div class="node-icon-large chatgpt-color"><i class="fa-solid fa-bolt"></i></div>
+                        <h3>ChatGPT (OpenAI)</h3>
+                    </div>
+                    <div class="node-output-vertical">
+                        <strong>Vai trò cốt lõi:</strong> Đóng vai trò cấu trúc hóa nội dung, lên ý tưởng kịch bản tổng thể và biên tập đoạn văn giới thiệu bản thân (About Me) đạt tiêu chuẩn văn phong chuyên nghiệp cao.
+                    </div>
+                    <div class="prompt-title"><i class="fa-solid fa-terminal"></i> Prompt thực thi:</div>
+                    <div class="prompt-box-vertical">
+                        "Bạn là một chuyên gia viết sơ yếu lý lịch ngành Công nghệ thông tin. Hãy viết một đoạn giới thiệu bản thân khoảng 200 chữ cho sinh viên Kỹ thuật Máy tính đam mê Backend, Server, kiến trúc Microservices. Phong cách viết sáng tạo, chuyên nghiệp, mạnh mẽ theo xu hướng tương lai."
+                    </div>
+                    
+                    <div class="image-placeholder-container">
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 5px;"></p>
+                        <img src="img_lms5/img5_1.png" alt="Minh họa giao diện tương tác ChatGPT">
+                    </div>
+                </div>
+
+                <div class="pipeline-node-vertical" style="border-color: rgba(26, 115, 232, 0.25);">
+                    <div class="node-step-badge">BƯỚC 2: CHUẨN HÓA KỸ THUẬT & TỪ KHÓA</div>
+                    <div class="node-header-vertical">
+                        <div class="node-icon-large gemini-color"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <h3>Gemini (Google)</h3>
+                    </div>
+                    <div class="node-output-vertical">
+                        <strong>Vai trò cốt lõi:</strong> Kiểm tra tính cập nhật của các xu hướng công nghệ, phân tích tối ưu hóa thuật ngữ chuyên ngành và trích xuất bộ từ khóa tiếng Anh miêu tả bối cảnh đồ họa Cyberpunk.
+                    </div>
+                    <div class="prompt-title"><i class="fa-solid fa-terminal"></i> Prompt thực thi:</div>
+                    <div class="prompt-box-vertical">
+                        "Hãy phân tích đoạn giới thiệu dưới đây (bản của ChatGPT). Hãy tối ưu hóa lại các từ khóa công nghệ sao cho hiện đại nhất trong năm nay, đồng thời trích xuất ra một bộ từ khóa tiếng Anh miêu tả bối cảnh, ánh sáng phong cách Cyberpunk để tôi làm prompt tạo ảnh."
+                    </div>
+                    
+                    <div class="image-placeholder-container">
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 5px;"></p>
+                        <img src="img_lms5/img5_2.png" alt="Minh họa giao diện tương tác Gemini">
+                    </div>
+                </div>
+
+                <div class="pipeline-node-vertical" style="border-color: rgba(0, 120, 212, 0.25);">
+                    <div class="node-step-badge">BƯỚC 3: THỰC THI SÁNG TẠO ĐỒ HỌA</div>
+                    <div class="node-header-vertical">
+                        <div class="node-icon-large copilot-color"><i class="fa-solid fa-palette"></i></div>
+                        <h3>Microsoft Copilot (DALL-E 3)</h3>
+                    </div>
+                    <div class="node-output-vertical">
+                        <strong>Vai trò cốt lõi:</strong> Tiếp nhận bộ từ khóa xử lý từ Gemini, kích hoạt mô hình Dall-E 3 tích hợp sẵn để thiết kế trực tiếp hình ảnh nhân vật số hóa đồng bộ tone màu tím và xanh của website.
+                    </div>
+                    <div class="prompt-title"><i class="fa-solid fa-terminal"></i> Prompt thực thi:</div>
+                    <div class="prompt-box-vertical">
+                        " A photorealistic, hyper-detailed cinematic shot of a young male computer engineer in his futuristic cyberpunk workstation. He is focused, looking at multiple holographic screens displaying complex server architectures, backend source code, and network nodes. The background is filled with dark server racks, blinking cyan and purple LED lights, and tangled wires. Cyberpunk aesthetics, techwear outfit. Moody atmospheric lighting with sharp neon blue and purple glows casting on his face, cinematic contrast, 8k resolution, highly detailed textures, Unreal Engine 5 render style."
+                    </div>
+                    
+                    <div class="image-placeholder-container">
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 5px;"></p>
+                        <img src="img_lms5/img5_3.png" alt="Minh họa ảnh tạo từ Microsoft Copilot">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-table-cells"></i> Ma trận đánh giá và So sánh hiệu năng AI</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tiêu chí so sánh</th>
+                            <th>ChatGPT (OpenAI)</th>
+                            <th>Gemini (Google)</th>
+                            <th>Microsoft Copilot</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color: #9f5cff; font-weight: 600;">Thế mạnh cốt lõi</td>
+                            <td>Tư duy ngữ cảnh logic vượt trội, cấu trúc văn bản chuẩn mực, hành văn mượt mà.</td>
+                            <td>Tra cứu dữ liệu thời gian thực xuất sắc, phân tích thông số, tối ưu hóa từ khóa kỹ thuật.</td>
+                            <td>Đa nhiệm tốt, tích hợp sâu hệ sinh thái, tạo ảnh đồ họa chất lượng cao trực tiếp.</td>
+                        </tr>
+                        <tr>
+                            <td style="color: #9f5cff; font-weight: 600;">Đầu ra văn bản</td>
+                            <td>Độ sâu học thuật cao, dễ dàng tùy biến linh hoạt theo định hướng yêu cầu.</td>
+                            <td>Cấu trúc rõ ràng, mang tính cập nhật xu hướng mới, phân tách bullet-point khoa học.</td>
+                            <td>Ngắn gọn, cô đọng, tập trung trực tiếp giải quyết vào giải pháp thực thi cấu trúc.</td>
+                        </tr>
+                        <tr>
+                            <td style="color: #9f5cff; font-weight: 600;">Tác vụ đồ họa</td>
+                            <td>Giới hạn ở phiên bản miễn phí, cần cấu trúc câu lệnh mô tả gián tiếp.</td>
+                            <td>Hỗ trợ kết xuất hình ảnh ở mức cơ bản, độ bám sát chi tiết tham số kỹ thuật cần cải thiện.</td>
+                            <td>Cực kỳ mạnh mẽ nhờ DALL-E 3 nhúng sẵn, xử lý ánh sáng đổ bóng không gian rất sâu.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-lightbulb"></i> Bài học kinh nghiệm & Tư duy thiết kế chuỗi</h2>
+            <div class="insight-box">
+                <p style="line-height: 1.8; color: #e0e0e0;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #00ffff; margin-right: 8px;"></i>
+                    <strong>Nguyên lý phối hợp vạn năng:</strong> Bản chất của các mô hình trí tuệ nhân tạo tạo sinh hiện nay là không có mô hình nào độc tôn hoàn hảo. Năng lực cốt lõi của một sinh viên công nghệ là khả năng nhìn nhận ra thế mạnh riêng biệt của từng công cụ để tổ chức phân luồng công việc: Khởi tạo ý tưởng bằng ChatGPT, chuẩn hóa tối ưu hóa bằng Gemini, và thực thi đồ họa hóa bằng Copilot.
+                </p>
+            </div>
+        </div>
+
+        <div class="card" style="border-color: rgba(0, 255, 255, 0.3);">
+            <h2><i class="fa-solid fa-circle-check"></i> Kết luận thực hành</h2>
+            <p style="color: #d0d0d0; font-size: 1.1rem; line-height: 1.9;">
+                Quá trình nghiên cứu và ứng dụng linh hoạt bộ ba AI tạo sinh giúp nâng cao hiệu suất làm việc lên gấp nhiều lần. Việc làm chủ tư duy thiết kế cấu trúc prompt không chỉ phục vụ xây dựng nội dung, tài nguyên hình ảnh đồng bộ cho Portfolio, mà còn củng cố vững chắc kỹ năng tư duy hệ thống và làm chủ các công cụ chuyển đổi số thế hệ mới.
+            </p>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="index.html#projects" class="back-btn">
+                    <i class="fa-solid fa-arrow-left"></i> Trở lại hệ thống danh mục
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+/* Stars Background Animation generation */
+for(let i=0;i<180;i++){
+    const star=document.createElement("div");
+    star.classList.add("star");
+    star.style.left=Math.random()*100+"%";
+    star.style.animationDuration=(Math.random()*6+4)+"s";
+    star.style.animationDelay=Math.random()*5+"s";
+    document.getElementById("stars").appendChild(star);
+}
+</script>
+
+</body>
+</html>

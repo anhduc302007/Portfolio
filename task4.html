@@ -1,0 +1,506 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 4: Sử dụng công cụ hợp tác trực tuyến cho dự án nhóm - Doãn Anh Đức</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#050505;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* ===== Background ===== */
+.stars{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:float linear infinite;
+}
+
+@keyframes float{
+    from{ transform:translateY(100vh); opacity:0; }
+    20%{ opacity:1; }
+    to{ transform:translateY(-100px); opacity:0; }
+}
+
+/* ===== Menu ===== */
+.top-menu{
+    position:fixed;
+    top:15px;
+    right: 20px;
+    height: 60px;
+    background:rgba(0,0,0,.8);
+    border:2px solid rgba(255,255,255,.1);
+    border-radius: 30px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap: 15px;
+    padding: 0 20px;
+    z-index:9999;
+    backdrop-filter:blur(12px);
+}
+
+.menu-btn{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border:2px solid rgba(255,255,255,.3);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.menu-btn i {
+    font-size: 1.2rem;
+}
+
+.menu-btn:hover{
+    background:#8a2be2;
+    transform:translateY(-3px);
+}
+
+/* ===== Hero Header ===== */
+#task-hero {
+    min-height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 100px;
+    position: relative;
+}
+
+.hero-box {
+    width: 95%;
+    max-width: 1500px;
+    padding: 40px;
+    border-radius: 40px;
+    border: 2px solid rgba(159,92,255,.4);
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(15px);
+    text-align: center;
+    position: relative;
+}
+
+.hero-box h1 {
+    font-size: 2.6rem;
+    letter-spacing: 3px;
+    color: white;
+    text-shadow: 0 0 10px #6a00ff, 0 0 30px #6a00ff;
+    margin-bottom: 15px;
+}
+
+.hero-box p {
+    font-size: 1.2rem;
+    color: #00bfff;
+    font-weight: 500;
+}
+
+/* ===== Content Area ===== */
+.content{
+    position:relative;
+    z-index:20;
+    background:#050505;
+    border-radius:60px 60px 0 0;
+    padding: 60px 10%;
+}
+
+.grid-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(159,92,255,.3);
+    border-radius:20px;
+    padding:40px;
+    line-height:1.8;
+}
+
+.card h2 {
+    color: #9f5cff;
+    margin-bottom: 25px;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(159,92,255,.2);
+    padding-bottom: 10px;
+}
+
+.card h2 i {
+    color: #00ffff;
+}
+
+/* ===== Tools Grid Layout ===== */
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-top: 15px;
+}
+
+@media(max-width: 768px) {
+    .tools-grid { grid-template-columns: 1fr; }
+}
+
+.tool-box {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(159, 92, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    transition: 0.3s;
+}
+
+.tool-box:hover {
+    transform: translateY(-3px);
+    border-color: rgba(159, 92, 255, 0.4);
+    box-shadow: 0 5px 20px rgba(138, 43, 226, 0.1);
+}
+
+.tool-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.tool-icon {
+    font-size: 1.8rem;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.trello-icon { background: rgba(0, 121, 191, 0.15); color: #0079bf; }
+.docs-icon { background: rgba(38, 133, 240, 0.15); color: #2685f0; }
+.drive-icon { background: rgba(52, 168, 83, 0.15); color: #34a853; }
+.discord-icon { background: rgba(88, 101, 242, 0.15); color: #5865f2; }
+
+.tool-header h3 {
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+.tool-desc {
+    font-size: 0.95rem;
+    color: #a0a0a0;
+    margin-bottom: 15px;
+}
+
+.tool-action {
+    background: rgba(0, 191, 255, 0.05);
+    border-left: 3px solid #00bfff;
+    padding: 10px 15px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.95rem;
+    color: #e0e0e0;
+}
+
+/* ===== Activities Timeline ===== */
+.timeline {
+    position: relative;
+    padding-left: 30px;
+    margin-top: 15px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    bottom: 5px;
+    width: 2px;
+    background: rgba(159, 92, 255, 0.3);
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -30px;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #00ffff;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+.timeline-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.timeline-desc {
+    color: #a0a0a0;
+    font-size: 0.95rem;
+}
+
+/* ===== Columns Layout for Troubleshoot ===== */
+.split-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+@media(max-width: 768px) {
+    .split-layout { grid-template-columns: 1fr; }
+}
+
+.split-col {
+    background: rgba(255,255,255,0.01);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.danger-list li {
+    margin-bottom: 12px;
+    list-style: none;
+    padding-left: 25px;
+    position: relative;
+    color: #d0d0d0;
+}
+
+.danger-list li::before {
+    content: '\f057';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: #ff4d4d;
+}
+
+.success-list li {
+    margin-bottom: 12px;
+    list-style: none;
+    padding-left: 25px;
+    position: relative;
+    color: #d0d0d0;
+}
+
+.success-list li::before {
+    content: '\f058';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 0;
+    color: #00ffff;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 12px 30px;
+    border-radius: 25px;
+    background: rgba(159, 92, 255, 0.2);
+    border: 1px solid #9f5cff;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+    font-weight: 500;
+}
+
+.back-btn:hover {
+    background: #9f5cff;
+    box-shadow: 0 0 15px #9f5cff;
+    transform: translateY(-2px);
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<nav class="top-menu" id="topMenu">
+    <a class="menu-btn" href="index.html#hero" title="Trang chủ">
+        <i class="fa-solid fa-house"></i>
+    </a>
+    <a class="menu-btn" href="index.html#about" title="Thông tin">
+        <i class="fa-solid fa-user"></i>
+    </a>
+    <a class="menu-btn" href="index.html#projects" title="Dự án">
+        <i class="fa-solid fa-briefcase"></i>
+    </a>
+    <a class="menu-btn" href="index.html#contact" title="Liên hệ">
+        <i class="fa-solid fa-envelope"></i>
+    </a>
+</nav>
+
+<section id="task-hero">
+    <div class="hero-box">
+        <h1>TASK 4: SỬ DỤNG CÔNG CỤ HỢP TÁC TRỰC TUYẾN TRONG LÀM VIỆC NHÓM</h1>
+        <p>Học phần: Nhập môn công nghệ số và ứng dụng trí tuệ nhân tạo</p>
+    </div>
+</section>
+
+<div class="content">
+    <div class="grid-layout">
+        
+        <div class="card">
+            <h2><i class="fa-solid fa-circle-info"></i> Giới thiệu không gian hợp tác</h2>
+            <p style="color: #d0d0d0;">Trong môi trường làm việc số hiện nay, năng lực ứng dụng các nền tảng hợp tác trực tuyến là điều kiện tiên quyết để tối ưu hóa hiệu suất. Các công cụ này đóng vai trò cốt lõi trong việc tăng hiệu quả quản lý phân rã công việc, nâng cao chất lượng kết nối thời gian thực, đồng thời tối ưu hóa hạ tầng lưu trữ và chia sẻ tài nguyên dữ liệu.</p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-cubes"></i> Hệ thống hạ tầng công cụ đã triển khai</h2>
+            <p style="color: #a0a0a0; margin-bottom: 15px;">Dự án nhóm được vận hành dựa trên sự kết hợp đồng bộ của 4 công cụ chuyên nghiệp thuộc các phân tầng chức năng khác nhau:</p>
+            
+            <div class="tools-grid">
+                <div class="tool-box">
+                    <div class="tool-header">
+                        <div class="tool-icon trello-icon"><i class="fa-brands fa-trello"></i></div>
+                        <h3>Trello</h3>
+                    </div>
+                    <div class="tool-desc">Quản trị luồng công việc, phân chia nhiệm vụ cho từng cấu trúc thành viên, kiểm soát trực quan hóa tiến độ hệ thống và quản lý nghiêm ngặt các mốc hạn định (Deadline).</div>
+                    <div class="tool-action"><strong>Hoạt động cá nhân:</strong> Tạo và liên tục cập nhật trạng thái các thẻ công việc (Cards), đánh dấu hoàn thành và theo dõi tiến độ tổng thể của nhóm.</div>
+                </div>
+
+                <div class="tool-box">
+                    <div class="tool-header">
+                        <div class="tool-icon docs-icon"><i class="fa-solid fa-file-word"></i></div>
+                        <h3>Google Docs</h3>
+                    </div>
+                    <div class="tool-desc">Đồng biên tập cấu trúc nội dung cốt lõi của nhóm, hỗ trợ chỉnh sửa và bổ sung thông tin trực tiếp theo thời gian thực và quản lý lịch sử các phiên bản (Version History).</div>
+                    <div class="tool-action"><strong>Hoạt động cá nhân:</strong> Trực tiếp tham gia phát triển nội dung, kiểm tra rà soát lỗi cú pháp, bổ sung thông tin kỹ thuật vào tài liệu chung.</div>
+                </div>
+
+                <div class="tool-box">
+                    <div class="tool-header">
+                        <div class="tool-icon drive-icon"><i class="fa-solid fa-hard-drive"></i></div>
+                        <h3>Google Drive</h3>
+                    </div>
+                    <div class="tool-desc">Hạ tầng trung tâm lưu trữ toàn bộ tài nguyên dự án, thực hiện phân phối chia sẻ tệp tin tốc độ cao và phân tầng quyền truy cập (Permissions) bảo mật.</div>
+                    <div class="tool-action"><strong>Hoạt động cá nhân:</strong> Đóng gói, tải lên (Upload) các tài liệu nghiên cứu cá nhân và tổ chức phân cấp hệ thống thư mục khoa học theo từng phần việc.</div>
+                </div>
+
+                <div class="tool-box">
+                    <div class="tool-header">
+                        <div class="tool-icon discord-icon"><i class="fa-brands fa-discord"></i></div>
+                        <h3>Discord</h3>
+                    </div>
+                    <div class="tool-desc">Kênh liên lạc luồng thông tin nhanh, thảo luận chuyên sâu các phân nhánh nội dung cấu thành dự án và tổ chức các phiên họp nhóm trực tuyến (Online Meeting).</div>
+                    <div class="tool-action"><strong>Hoạt động cá nhân:</strong> Tích cực tương tác, đặt câu hỏi phản biện kỹ thuật và đóng góp ý kiến giải pháp trong các phiên thảo luận.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-user-gear"></i> Nhật ký hành động cá nhân (Chu kỳ 1 tuần)</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-title">Quản trị Task độc lập trên Kanban Trello</div>
+                    <div class="timeline-desc">Lập kế hoạch, theo dõi sát sao danh sách đầu việc cá nhân, cam kết hoàn thành đúng tiến độ cam túc.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">Đồng biên tập dữ liệu trên Google Docs</div>
+                    <div class="timeline-desc">Tham gia viết báo cáo, đóng góp khối lượng tri thức cá nhân và chuẩn hóa văn bản tài liệu tổng kết.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">Chuẩn hóa cấu trúc tài nguyên trên Google Drive</div>
+                    <div class="timeline-desc">Tổ chức lưu trữ các tệp thiết kế, mã nguồn mô phỏng gọn gàng, tạo điều kiện cho nhóm dễ khai thác.</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-title">Duy trì kết nối mạng lưới trên Discord</div>
+                    <div class="timeline-desc">Tham gia đầy đủ các cuộc họp Scrum/họp tiến độ ngắn, giải quyết nhanh các nút thắt kỹ thuật cùng đồng đội.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-shield-halved"></i> Đánh giá hiệu năng & Giải pháp khắc phục khó khăn</h2>
+            <p style="color: #a0a0a0;">Phân tích ma trận hiệu quả cùng các giải pháp tối ưu luồng phối hợp nhóm:</p>
+            
+            <div class="split-layout">
+                <div class="split-col" style="border-color: rgba(255, 77, 77, 0.2);">
+                    <h3 style="color: #ff4d4d; margin-bottom: 15px;"><i class="fa-solid fa-triangle-exclamation"></i> Thách thức rào cản</h3>
+                    <ul class="danger-list">
+                        <li>Mức độ tương thích ban đầu với một số giao diện tính năng nâng cao của công cụ còn chưa mượt mà.</li>
+                        <li>Độ trễ phản hồi (Latency) từ một vài thành viên trong nhóm đôi lúc làm chậm luồng công việc chung.</li>
+                        <li>Xung đột phân bổ múi giờ sinh hoạt, khó đồng bộ thời gian thực cho các cuộc họp quy mô toàn đội.</li>
+                    </ul>
+                </div>
+                
+                <div class="split-col" style="border-color: rgba(0, 255, 255, 0.2);">
+                    <h3 style="color: #00ffff; margin-bottom: 15px;"><i class="fa-solid fa-key"></i> Giải pháp tối ưu hóa</h3>
+                    <ul class="success-list">
+                        <li>Chủ động nghiên cứu tài liệu Technical Documentation, làm chủ hoàn toàn các shortcut và tính năng ẩn của nền tảng.</li>
+                        <li>Xây dựng cơ chế nhắc nhở tự động, kích hoạt thông báo luồng tin để tăng tốc độ phản hồi hệ thống.</li>
+                        <li>Thiết lập khung lịch biểu cố định (Fixed Calendar), tận dụng tối đa phương thức phối hợp bất đồng bộ (Asynchronous) để tối ưu thời gian.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="border-color: rgba(0, 255, 255, 0.3);">
+            <h2><i class="fa-solid fa-square-check"></i> Tổng kết chiến lược</h2>
+            <p style="color: #d0d0d0; font-size: 1.1rem; line-height: 1.9;">
+                Trải qua quá trình thực thi dự án thực tế, việc làm chủ bộ công cụ hợp tác trực tuyến không chỉ là phương thức nâng cao năng suất, mà còn giúp hình thành tư duy tổ chức hệ thống một cách khoa học. Kỹ năng phối hợp từ xa này giúp củng cố năng lực quản trị dự án cá nhân, tạo nền tảng vững chắc cho quá trình tham gia vào các dự án mã nguồn mở hoặc môi trường công nghệ lớn trong tương lai.
+            </p>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="index.html#projects" class="back-btn">
+                    <i class="fa-solid fa-arrow-left"></i> Trở lại hệ thống danh mục
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+/* Stars Background Animation generation */
+for(let i=0;i<180;i++){
+    const star=document.createElement("div");
+    star.classList.add("star");
+    star.style.left=Math.random()*100+"%";
+    star.style.animationDuration=(Math.random()*6+4)+"s";
+    star.style.animationDelay=Math.random()*5+"s";
+    document.getElementById("stars").appendChild(star);
+}
+</script>
+
+</body>
+</html>
